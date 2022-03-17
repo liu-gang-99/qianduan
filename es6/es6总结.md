@@ -62,7 +62,7 @@ function fn(obj) {
 
 
 
-### 8 Promise
+### 8 `Promise`
 
 1. `Promise`是一个构造函数，接受一个函数作为参数，而函数的参数一个是 `resolve` 在异步操作成功时调用，另一个参数是 `reject` 在异步操作失败时调用
 2. `then` 同样接受两个函数作为参数，第一个函数在返回 `resolve` 时调用，表示成功的回调，第二个函数在返回 `reject` 时调用，表示失败的回调，并分别接受 `resolve/reject` 传递回来的参数
@@ -70,6 +70,18 @@ function fn(obj) {
 
 
 
-### 9 async
+### 9 `async`
 
-1. 
+1. `async` 可以定义一个异步函数，函数中 `retuen` 一个 x，不管 x 是什么类型，实际返回值总是 `Promise.resolve(x)`
+1. `await` 如果等待的是 `Promise` 对象，则会阻塞后面的代码，等着 `Promise` 对象 `resolve` ，然后得到 `resolve` 的值，作为 `await` 表达式的结果
+1. `await` 如果等待的不是 `Promise` 对象，`await` 表达式的结果就是等到的值
+
+
+
+### 10 `CommonJS`与`ES6`
+
+1. `CommonJS` 模块输出的是一个值的拷贝，有缓存，`ES6` 模块输出的是值的引用
+2. `CommonJS` 模块是运行时加载，只能加载整个模块，`ES6` 模块是编译时输出接口，可以单独加某一个或多个方法
+3. `CommonJS` 是单个值导出，`ES6` Module可以导出多个
+4. `CommonJS` 是动态语法可以写在判断里，`ES6` Module 静态语法只能写在顶层
+5. `CommonJS` 的 this 是当前模块，`ES6` Module的 this 是 undefined
