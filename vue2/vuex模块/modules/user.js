@@ -5,7 +5,7 @@ import { resetRouter } from '@/router'
 // 状态
 const state = {
   token: getToken(),
-  userInfo: {} // 我们会在 getters 中引用userinfo的变量，如果设置为null，则会引起异常和报错
+  userInfo: {} // 在 getters 中引用userinfo的变量，如果设置为null，则会引起异常和报错
 }
 
 // 修改状态
@@ -41,7 +41,7 @@ const actions = {
 
   async getUserInfo(context) {
     const res = await getUserInfo()
-    const baseInfo = await getUserDetailById(res.userId) // 为了获取头像
+    const baseInfo = await getUserDetailById(res.userId) // 获取头像
     const baseResult = { ...res, ...baseInfo }
     context.commit('setUserInfo', baseResult)
     return res // 跳转时接收权限
