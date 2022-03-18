@@ -67,14 +67,16 @@ function fn(obj) {
 1. `Promise`是一个构造函数，接受一个函数作为参数，而函数的参数一个是 `resolve` 在异步操作成功时调用，另一个参数是 `reject` 在异步操作失败时调用
 2. `then` 同样接受两个函数作为参数，第一个函数在返回 `resolve` 时调用，表示成功的回调，第二个函数在返回 `reject` 时调用，表示失败的回调，并分别接受 `resolve/reject` 传递回来的参数
 3. `catch` 与 `then`的第二个参数类似，都是在返回 `reject`时，但不同的是 `catch` 还能捕获 `then` 里面的错误，所以建议使用 `catch` 取代 `then` 的第二个参数
+3. `new Promise` 是同步任务，`Promise.[ then/catch/finally ]` 是异步任务中的微任务
 
 
 
-### 9 `async`
+### 9 `async/await`
 
 1. `async` 可以定义一个异步函数，函数中 `retuen` 一个 x，不管 x 是什么类型，实际返回值总是 `Promise.resolve(x)`
 1. `await` 如果等待的是 `Promise` 对象，则会阻塞后面的代码，等着 `Promise` 对象 `resolve` ，然后得到 `resolve` 的值，作为 `await` 表达式的结果
 1. `await` 如果等待的不是 `Promise` 对象，`await` 表达式的结果就是等到的值
+1. `await` 之前的代码是同步执行(包括 `await` 在行)，之后的代码是异步执行
 
 
 
