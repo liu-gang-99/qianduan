@@ -76,7 +76,7 @@ function fn(obj) {
 1. `async` 可以定义一个异步函数，函数中 `retuen` 一个 x，不管 x 是什么类型，实际返回值总是 `Promise.resolve(x)`
 1. `await` 如果等待的是 `Promise` 对象，则会阻塞后面的代码，等着 `Promise` 对象 `resolve` ，然后得到 `resolve` 的值，作为 `await` 表达式的结果
 1. `await` 如果等待的不是 `Promise` 对象，`await` 表达式的结果就是等到的值
-1. `await` 之前的代码是同步执行(包括 `await` 在行)，之后的代码是异步执行
+1. `await` 之前的代码是同步执行(包括 `await` 这行)，之后的代码是异步执行
 
 
 
