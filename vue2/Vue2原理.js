@@ -45,13 +45,18 @@ class Vue {
   $watch(key, cb) {
     new Watcher(this, key, cb)
   }
+
+  $set(target, key, value) {
+    defineReactive(target, key, value)
+    target.__ob__.dep.notify()
+  }
 }
 
-// -------------------- 实现数据劫持----------------------
+// -------------------- 实现数据劫持 ----------------------
 
 // 给单个属性设置 get set
 function defineReactive(obj, key, value) {
-  observe(value) // 判断是否需要递归
+  let childOb = observe(value) // 判断是否需要递归 并返回一个 Observer 实例
   let dep = new Dep()
   Object.defineProperty(obj, key, {
     enumerable: true,
@@ -59,6 +64,7 @@ function defineReactive(obj, key, value) {
     get() {
       // console.log('读取了', key, value)
       dep.depend() // 向当前属性的 dep实例中存放 watch实例
+      if (childOb) childOb.dep.depend() // 向 Observer实例的 dep实例添加侦听器
       return value
     },
     set(newValue) {
@@ -74,14 +80,21 @@ function defineReactive(obj, key, value) {
 function observe(data) {
   let type = Object.prototype.toString.call(data).slice(8, -1)
   if (type !== 'Object' && type !== 'Array') return // 排除基本数据类型
-
-  new Observer(data)
+  if (data.__ob__) return data.__ob__ // 排除已经有 Observer 的
+  return new Observer(data)
 }
 
 // 给引用数据类型循环调用 设置 get set
 class Observer {
   constructor(data) {
+    this.dep = new Dep()
     this.walk(data)
+    Object.defineProperty(data, '__ob__', {
+      value: this,
+      enumerable: false,
+      configurable: true,
+      writable: true
+    })
   }
   walk(data) {
     const keys = Object.keys(data)
@@ -91,7 +104,7 @@ class Observer {
   }
 }
 
-// ------------------- 实现 watch  --------------------
+// -------------------- 实现 watch --------------------
 /* 每个属性在设置响应式的时候都会创建一个自己的 dep实例 用来存储自己的 watch实例 */
 
 // 框
@@ -100,7 +113,7 @@ class Dep {
     this.subs = []
   }
   // 收集侦听器 只有在创建 watch实例的时候才能添加
-  // Dep.target 指向 watch实例后 就添加 添加完成就清空 Dep.targe 所有读取数据就不会重复添加
+  // Dep.target 指向 watch实例后 就添加 添加完成就清空 Dep.target 所有读取数据就不会重复添加
   depend() {
     // 判断有无 watch
     if (Dep.target) {
@@ -109,7 +122,7 @@ class Dep {
   }
   // 执行回调
   notify() {
-    this.subs.forEach((watcher) => {
+    this.subs.forEach(watcher => {
       watcher.run() // 依次执行回调函数
     })
   }
